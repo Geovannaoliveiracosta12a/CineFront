@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cadastrar Filme | CineFlash</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+    <header class="topo">
+
+        <a href="index.html" class="logo logo-link">
+            <span class="logo-pequeno">CINEMA</span>
+            <span class="logo-principal">CineFlash</span>
+            <span class="logo-80">80'S</span>
+        </a>
+
+        <a href="index.html" class="btn-voltar">
+            ← VOLTAR
+        </a>
+
+    </header>
+
+
+    <main class="pagina-formulario">
+
+        <section class="form-card">
+
+            <div class="form-titulo">
+
+                <span class="ingresso">INGRESSO Nº 0080</span>
+
+                <h1>NOVO FILME</h1>
+
+                <p>
+                    PREENCHA OS DADOS PARA COLOCAR O FILME EM CARTAZ.
+                </p>
+
+            </div>
+
+
+            <form id="form-cadastro">
+
+                <div class="campo">
+
+                    <label for="title">
+                        TÍTULO DO FILME
+                    </label>
+
+                    <input
+                        type="text"
+                        id="title"
+                        placeholder="Ex: De Volta Para o Futuro"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="campo">
+
+                    <label for="genre">
+                        GÊNERO
+                    </label>
+
+                    <input
+                        type="text"
+                        id="genre"
+                        placeholder="Ex: Ficção científica"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="linha">
+
+                    <div class="campo">
+
+                        <label for="duration">
+                            DURAÇÃO
+                        </label>
+
+                        <input
+                            type="number"
+                            id="duration"
+                            placeholder="120"
+                            min="1"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="campo">
+
+                        <label for="age_rating">
+                            CLASSIFICAÇÃO
+                        </label>
+
+                        <input
+                            type="number"
+                            id="age_rating"
+                            placeholder="12"
+                            min="0"
+                            required
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <button type="submit" class="btn-principal">
+                    🎟 COLOCAR EM CARTAZ
+                </button>
+
+            </form>
+
+
+            <div id="mensagem-cadastro" class="mensagem-form"></div>
+
+        </section>
+
+    </main>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

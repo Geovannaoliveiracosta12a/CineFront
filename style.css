@@ -1,0 +1,696 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --preto: #09050d;
+    --roxo: #39104f;
+    --roxo-claro: #71219b;
+    --rosa: #ff3cac;
+    --amarelo: #ffd84d;
+    --laranja: #ff7b22;
+    --branco: #fff8ee;
+}
+
+body {
+    min-height: 100vh;
+
+    font-family: "Montserrat", sans-serif;
+
+    color: var(--branco);
+
+    background:
+        radial-gradient(circle at 50% 0%, #49135e 0%, transparent 38%),
+        linear-gradient(135deg, #08040b, #18091e 50%, #08040b);
+
+    background-attachment: fixed;
+}
+
+
+/* =========================
+   TOPO
+========================= */
+
+.topo {
+    min-height: 110px;
+
+    padding: 20px 7%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border-bottom: 3px solid var(--amarelo);
+
+    background: rgba(8, 4, 11, 0.92);
+
+    box-shadow:
+        0 5px 30px rgba(255, 60, 172, 0.18);
+
+    position: relative;
+    z-index: 10;
+}
+
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    text-decoration: none;
+
+    transform: rotate(-2deg);
+}
+
+.logo-link {
+    cursor: pointer;
+}
+
+.logo-pequeno {
+    font-size: 10px;
+    font-weight: 800;
+
+    letter-spacing: 3px;
+
+    color: var(--amarelo);
+
+    align-self: flex-start;
+
+    margin-top: 5px;
+}
+
+.logo-principal {
+    font-family: "Bebas Neue", sans-serif;
+
+    font-size: 48px;
+    line-height: 0.8;
+
+    letter-spacing: 2px;
+
+    color: var(--branco);
+
+    text-shadow:
+        3px 3px 0 var(--rosa),
+        6px 6px 0 rgba(255, 123, 34, 0.5);
+}
+
+.logo-80 {
+    font-family: "Bebas Neue", sans-serif;
+
+    font-size: 27px;
+
+    color: var(--rosa);
+
+    text-shadow:
+        0 0 10px var(--rosa);
+
+    transform: rotate(5deg);
+}
+
+
+/* =========================
+   BOTÕES
+========================= */
+
+.btn-cadastrar,
+.btn-voltar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 48px;
+
+    padding: 0 22px;
+
+    border: 2px solid var(--amarelo);
+
+    color: var(--amarelo);
+
+    text-decoration: none;
+
+    font-size: 12px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+    transition: 0.25s ease;
+
+    background: rgba(255, 216, 77, 0.04);
+}
+
+.btn-cadastrar:hover,
+.btn-voltar:hover {
+    color: var(--preto);
+
+    background: var(--amarelo);
+
+    box-shadow:
+        0 0 15px rgba(255, 216, 77, 0.6);
+
+    transform: translateY(-2px);
+}
+
+
+/* =========================
+   HERO
+========================= */
+
+.hero {
+    text-align: center;
+
+    padding: 70px 20px 40px;
+}
+
+.letreiro {
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    gap: 20px;
+}
+
+.letreiro span {
+    color: var(--amarelo);
+
+    font-size: 25px;
+
+    text-shadow:
+        0 0 10px var(--amarelo);
+}
+
+.letreiro h1 {
+    font-family: "Bebas Neue", sans-serif;
+
+    font-size: clamp(42px, 7vw, 78px);
+
+    letter-spacing: 5px;
+
+    color: var(--branco);
+
+    text-shadow:
+        4px 4px 0 var(--roxo-claro),
+        0 0 25px rgba(255, 60, 172, 0.4);
+}
+
+.hero p {
+    margin-top: 14px;
+
+    font-size: 11px;
+
+    letter-spacing: 4px;
+
+    color: #d7c7db;
+}
+
+
+/* =========================
+   FILMES
+========================= */
+
+.filmes-container {
+    width: min(1100px, 90%);
+
+    margin: auto;
+
+    padding-bottom: 70px;
+}
+
+.lista-filmes {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(280px, 1fr));
+
+    gap: 25px;
+}
+
+
+/* ingresso */
+
+.filme-card {
+    position: relative;
+
+    overflow: hidden;
+
+    min-height: 300px;
+
+    padding: 28px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(113, 33, 155, 0.35),
+            rgba(20, 7, 25, 0.95)
+        );
+
+    border: 1px solid rgba(255, 216, 77, 0.5);
+
+    box-shadow:
+        8px 8px 0 rgba(255, 60, 172, 0.15);
+
+    transition: 0.3s ease;
+}
+
+.filme-card::before {
+    content: "";
+
+    position: absolute;
+
+    width: 100%;
+    height: 4px;
+
+    top: 0;
+    left: 0;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--rosa),
+            var(--amarelo),
+            var(--laranja)
+        );
+}
+
+.filme-card::after {
+    content: "✦";
+
+    position: absolute;
+
+    right: 18px;
+    bottom: 8px;
+
+    font-size: 70px;
+
+    color: rgba(255, 216, 77, 0.04);
+}
+
+.filme-card:hover {
+    transform: translateY(-8px);
+
+    border-color: var(--rosa);
+
+    box-shadow:
+        0 15px 35px rgba(255, 60, 172, 0.2),
+        8px 8px 0 rgba(255, 216, 77, 0.12);
+}
+
+.filme-numero {
+    font-family: "Bebas Neue", sans-serif;
+
+    color: var(--amarelo);
+
+    font-size: 18px;
+
+    letter-spacing: 2px;
+}
+
+.filme-titulo {
+    margin-top: 10px;
+
+    font-family: "Bebas Neue", sans-serif;
+
+    font-size: 38px;
+
+    line-height: 0.95;
+
+    letter-spacing: 1px;
+
+    color: white;
+}
+
+.filme-genero {
+    margin-top: 12px;
+
+    color: #d5bce0;
+
+    font-size: 12px;
+
+    text-transform: uppercase;
+}
+
+.filme-info {
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 25px;
+}
+
+.info {
+    padding: 8px 10px;
+
+    border: 1px dashed rgba(255, 216, 77, 0.5);
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    color: var(--amarelo);
+}
+
+.acoes {
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 25px;
+}
+
+.btn-editar,
+.btn-apagar {
+    flex: 1;
+
+    min-height: 42px;
+
+    border: 1px solid;
+
+    font-family: "Montserrat", sans-serif;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.btn-editar {
+    border-color: var(--amarelo);
+
+    background: transparent;
+
+    color: var(--amarelo);
+}
+
+.btn-editar:hover {
+    background: var(--amarelo);
+
+    color: var(--preto);
+}
+
+.btn-apagar {
+    border-color: var(--rosa);
+
+    background: transparent;
+
+    color: var(--rosa);
+}
+
+.btn-apagar:hover {
+    background: var(--rosa);
+
+    color: white;
+}
+
+
+/* =========================
+   FORMULÁRIO
+========================= */
+
+.pagina-formulario {
+    min-height: calc(100vh - 110px);
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    padding: 60px 20px;
+}
+
+.form-card {
+    width: min(650px, 100%);
+
+    padding: 45px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(57, 16, 79, 0.95),
+            rgba(12, 5, 15, 0.98)
+        );
+
+    border: 2px solid var(--amarelo);
+
+    box-shadow:
+        12px 12px 0 rgba(255, 60, 172, 0.15),
+        0 0 40px rgba(113, 33, 155, 0.2);
+}
+
+.form-titulo {
+    text-align: center;
+
+    margin-bottom: 35px;
+}
+
+.ingresso {
+    display: inline-block;
+
+    padding: 5px 12px;
+
+    border: 1px dashed var(--amarelo);
+
+    color: var(--amarelo);
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+}
+
+.form-titulo h1 {
+    margin-top: 15px;
+
+    font-family: "Bebas Neue", sans-serif;
+
+    font-size: 55px;
+
+    letter-spacing: 3px;
+
+    text-shadow:
+        3px 3px 0 var(--rosa);
+}
+
+.form-titulo p {
+    margin-top: 8px;
+
+    font-size: 10px;
+
+    letter-spacing: 1px;
+
+    color: #cdbbd2;
+}
+
+.campo {
+    display: flex;
+
+    flex-direction: column;
+
+    margin-bottom: 22px;
+}
+
+.campo label {
+    margin-bottom: 8px;
+
+    color: var(--amarelo);
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+.campo input {
+    width: 100%;
+
+    padding: 15px;
+
+    border: 1px solid #7d5a89;
+
+    outline: none;
+
+    background: rgba(0, 0, 0, 0.35);
+
+    color: white;
+
+    font-family: "Montserrat", sans-serif;
+
+    font-size: 13px;
+
+    transition: 0.2s;
+}
+
+.campo input::placeholder {
+    color: #8f7895;
+}
+
+.campo input:focus {
+    border-color: var(--rosa);
+
+    box-shadow:
+        0 0 12px rgba(255, 60, 172, 0.25);
+}
+
+.linha {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 20px;
+}
+
+.btn-principal {
+    width: 100%;
+
+    min-height: 55px;
+
+    margin-top: 10px;
+
+    border: none;
+
+    cursor: pointer;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--rosa),
+            var(--laranja)
+        );
+
+    color: white;
+
+    font-family: "Montserrat", sans-serif;
+
+    font-size: 11px;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+    transition: 0.25s;
+
+    box-shadow:
+        0 5px 20px rgba(255, 60, 172, 0.25);
+}
+
+.btn-principal:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 8px 25px rgba(255, 60, 172, 0.4);
+}
+
+.mensagem,
+.mensagem-form {
+    text-align: center;
+
+    padding: 25px;
+
+    color: var(--amarelo);
+
+    font-size: 11px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+    padding: 25px;
+
+    text-align: center;
+
+    border-top: 1px solid rgba(255, 216, 77, 0.2);
+
+    color: #725e78;
+
+    font-size: 9px;
+
+    letter-spacing: 2px;
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    .topo {
+        padding: 18px 5%;
+
+        min-height: 90px;
+    }
+
+    .logo-pequeno {
+        display: none;
+    }
+
+    .logo-principal {
+        font-size: 38px;
+    }
+
+    .logo-80 {
+        font-size: 20px;
+    }
+
+    .btn-cadastrar,
+    .btn-voltar {
+        min-height: 40px;
+
+        padding: 0 12px;
+
+        font-size: 9px;
+    }
+
+    .hero {
+        padding-top: 50px;
+    }
+
+    .letreiro {
+        gap: 8px;
+    }
+
+    .letreiro h1 {
+        font-size: 42px;
+
+        letter-spacing: 2px;
+    }
+
+    .letreiro span {
+        font-size: 15px;
+    }
+
+    .hero p {
+        font-size: 8px;
+
+        letter-spacing: 2px;
+    }
+
+    .form-card {
+        padding: 28px 20px;
+    }
+
+    .form-titulo h1 {
+        font-size: 43px;
+    }
+
+    .linha {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+}
