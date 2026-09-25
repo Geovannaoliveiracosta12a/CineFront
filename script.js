@@ -1,8 +1,40 @@
+const API = "https://cine-flash-backend.vercel.app";
+
+
 // ==================================================
-// CONFIGURAÇÃO DA API
+// INICIAR
 // ==================================================
 
-const API = "https://cine-flash-backend.vercel.app";
+document.addEventListener("DOMContentLoaded", () => {
+
+    // INDEX
+    if (document.getElementById("lista-filmes")) {
+        carregarFilmes();
+    }
+
+    // CADASTRO
+    const formularioCadastro = document.getElementById("form-cadastro");
+
+    if (formularioCadastro) {
+        formularioCadastro.addEventListener(
+            "submit",
+            cadastrarFilme
+        );
+    }
+
+    // EDIÇÃO
+    const formularioEditar = document.getElementById("form-editar");
+
+    if (formularioEditar) {
+        carregarFilmeParaEditar();
+
+        formularioEditar.addEventListener(
+            "submit",
+            atualizarFilme
+        );
+    }
+
+});
 
 
 // ==================================================
@@ -14,17 +46,12 @@ async function carregarFilmes() {
     const lista = document.getElementById("lista-filmes");
     const carregando = document.getElementById("carregando");
 
-    if (carregando) {
-        carregando.style.display = "block";
-    }
-
     try {
 
-        // A raiz do backend já retorna os filmes
         const resposta = await fetch(API);
 
         if (!resposta.ok) {
-            throw new Error(`Erro HTTP: ${resposta.status}`);
+            throw new Error("Erro ao buscar filmes.");
         }
 
         const filmes = await resposta.json();
@@ -33,65 +60,129 @@ async function carregarFilmes() {
             carregando.style.display = "none";
         }
 
-        if (!lista) {
-            return;
-        }
-
         lista.innerHTML = "";
 
-        if (!filmes || filmes.length === 0) {
+        if (filmes.length === 0) {
 
             lista.innerHTML = `
-                <p class="mensagem-vazia">
-                    Nenhum filme cadastrado.
-                </p>
+                <div class="mensagem">
+                    NENHUM FILME CADASTRADO.
+                </div>
             `;
 
             return;
         }
 
-        filmes.forEach((filme) => {
+        filmes.forEach((filme, index) => {
 
+            // CARD
             const card = document.createElement("div");
-
             card.className = "filme-card";
 
-            card.innerHTML = `
-                <h3>${filme.title}</h3>
 
-                <p>
-                    <strong>Gênero:</strong>
-                    ${filme.genre}
-                </p>
+            // NÚMERO
+            const numero = document.createElement("div");
+            numero.className = "filme-numero";
 
-                <p>
-                    <strong>Duração:</strong>
-                    ${filme.duration} min
-                </p>
+            numero.textContent =
+                `INGRESSO Nº ${String(index + 1).padStart(4, "0")}`;
 
-                <p>
-                    <strong>Classificação:</strong>
-                    ${filme.age_rating}
-                </p>
 
-                <div class="acoes">
+            // TÍTULO
+            const titulo = document.createElement("div");
+            titulo.className = "filme-titulo";
 
-                    <button
-                        type="button"
-                        onclick="editarFilme(${filme.id})"
-                    >
-                        Editar
-                    </button>
+            titulo.textContent = filme.title;
 
-                    <button
-                        type="button"
-                        onclick="apagarFilme(${filme.id}, '${String(filme.title).replace(/'/g, "\\'")}')"
-                    >
-                        Excluir
-                    </button>
 
-                </div>
-            `;
+            // GÊNERO
+            const genero = document.createElement("div");
+            genero.className = "filme-genero";
+
+            genero.textContent = filme.genre;
+
+
+            // INFORMAÇÕES
+            const informacoes = document.createElement("div");
+            informacoes.className = "filme-info";
+
+
+            // DURAÇÃO
+            const duracao = document.createElement("span");
+            duracao.className = "info";
+
+            duracao.textContent =
+                `${filme.duration} MIN`;
+
+
+            // CLASSIFICAÇÃO
+            const classificacao = document.createElement("span");
+            classificacao.className = "info";
+
+            classificacao.textContent =
+                `${filme.age_rating} ANOS`;
+
+
+            informacoes.appendChild(duracao);
+            informacoes.appendChild(classificacao);
+
+
+            // AÇÕES
+            const acoes = document.createElement("div");
+            acoes.className = "acoes";
+
+
+            // BOTÃO EDITAR
+            const botaoEditar = document.createElement("button");
+
+            botaoEditar.type = "button";
+            botaoEditar.className = "btn-editar";
+            botaoEditar.textContent = "EDITAR";
+
+
+            botaoEditar.addEventListener(
+                "click",
+                () => {
+
+                    window.location.href =
+                        `editar.html?id=${filme.id}`;
+
+                }
+            );
+
+
+            // BOTÃO APAGAR
+            const botaoApagar = document.createElement("button");
+
+            botaoApagar.type = "button";
+            botaoApagar.className = "btn-apagar";
+            botaoApagar.textContent = "APAGAR";
+
+
+            botaoApagar.addEventListener(
+                "click",
+                () => {
+
+                    apagarFilme(
+                        filme.id,
+                        filme.title
+                    );
+
+                }
+            );
+
+
+            acoes.appendChild(botaoEditar);
+            acoes.appendChild(botaoApagar);
+
+
+            // MONTAR CARD
+            card.appendChild(numero);
+            card.appendChild(titulo);
+            card.appendChild(genero);
+            card.appendChild(informacoes);
+            card.appendChild(acoes);
+
 
             lista.appendChild(card);
 
@@ -99,85 +190,24 @@ async function carregarFilmes() {
 
     } catch (erro) {
 
-        console.error("Erro ao carregar filmes:", erro);
+        console.error(
+            "Erro ao carregar filmes:",
+            erro
+        );
 
         if (carregando) {
             carregando.style.display = "none";
         }
 
-        if (lista) {
-
-            lista.innerHTML = `
-                <div class="erro-servidor">
-                    <h3>NÃO FOI POSSÍVEL CONECTAR AO SERVIDOR.</h3>
-                    <p>
-                        Verifique a conexão com o servidor.
-                    </p>
-                </div>
-            `;
-
-        }
+        lista.innerHTML = `
+            <div class="mensagem">
+                NÃO FOI POSSÍVEL CONECTAR AO SERVIDOR.
+                <br><br>
+                Verifique a conexão com o servidor.
+            </div>
+        `;
 
     }
-
-}
-
-
-// ==================================================
-// EXCLUIR FILME
-// ==================================================
-
-async function apagarFilme(id, titulo) {
-
-    const confirmar = confirm(
-        `Deseja realmente excluir o filme "${titulo}"?`
-    );
-
-    if (!confirmar) {
-        return;
-    }
-
-    try {
-
-        const resposta = await fetch(
-            `${API}/delete-filmes/${id}`,
-            {
-                method: "DELETE"
-            }
-        );
-
-        if (!resposta.ok) {
-            throw new Error(`Erro HTTP: ${resposta.status}`);
-        }
-
-        const resultado = await resposta.json();
-
-        alert(
-            resultado.message || "Filme excluído com sucesso!"
-        );
-
-        carregarFilmes();
-
-    } catch (erro) {
-
-        console.error("Erro ao excluir filme:", erro);
-
-        alert(
-            "Não foi possível excluir o filme."
-        );
-
-    }
-
-}
-
-
-// ==================================================
-// IR PARA A PÁGINA DE EDIÇÃO
-// ==================================================
-
-function editarFilme(id) {
-
-    window.location.href = `editar.html?id=${id}`;
 
 }
 
@@ -190,37 +220,27 @@ async function cadastrarFilme(event) {
 
     event.preventDefault();
 
-    const form = event.target;
 
-    const title = form.querySelector(
-        '[name="title"]'
-    )?.value.trim();
+    const titulo =
+        document.getElementById("title").value.trim();
 
-    const genre = form.querySelector(
-        '[name="genre"]'
-    )?.value.trim();
+    const genero =
+        document.getElementById("genre").value.trim();
 
-    const duration = form.querySelector(
-        '[name="duration"]'
-    )?.value;
+    const duracao =
+        document.getElementById("duration").value;
 
-    const age_rating = form.querySelector(
-        '[name="age_rating"]'
-    )?.value;
+    const classificacao =
+        document.getElementById("age_rating").value;
 
-    if (
-        !title ||
-        !genre ||
-        !duration ||
-        !age_rating
-    ) {
 
-        alert(
-            "Preencha todos os campos."
-        );
+    const dados = {
+        title: titulo,
+        genre: genero,
+        duration: duracao,
+        age_rating: classificacao
+    };
 
-        return;
-    }
 
     try {
 
@@ -233,36 +253,72 @@ async function cadastrarFilme(event) {
                     "Content-Type": "application/json"
                 },
 
-                body: JSON.stringify({
-                    title: title,
-                    genre: genre,
-                    duration: duration,
-                    age_rating: age_rating
-                })
+                body: JSON.stringify(dados)
             }
         );
 
+
         if (!resposta.ok) {
-            throw new Error(`Erro HTTP: ${resposta.status}`);
+            throw new Error(
+                "Erro ao cadastrar filme."
+            );
         }
 
-        const resultado = await resposta.json();
+
+        const resultado =
+            await resposta.json();
+
+
+        const mensagem =
+            document.getElementById(
+                "mensagem-cadastro"
+            );
+
+
+        if (mensagem) {
+
+            mensagem.textContent =
+                resultado.message ||
+                "Filme cadastrado com sucesso!";
+
+        }
+
 
         alert(
             resultado.message ||
             "Filme cadastrado com sucesso!"
         );
 
-        form.reset();
+
+        document
+            .getElementById("form-cadastro")
+            .reset();
+
 
         window.location.href = "index.html";
+
 
     } catch (erro) {
 
         console.error(
-            "Erro ao cadastrar filme:",
+            "Erro ao cadastrar:",
             erro
         );
+
+
+        const mensagem =
+            document.getElementById(
+                "mensagem-cadastro"
+            );
+
+
+        if (mensagem) {
+
+            mensagem.textContent =
+                "Não foi possível cadastrar o filme.";
+
+        }
+
 
         alert(
             "Não foi possível cadastrar o filme."
@@ -274,36 +330,52 @@ async function cadastrarFilme(event) {
 
 
 // ==================================================
-// CARREGAR FILME PARA EDIÇÃO
+// CARREGAR FILME PARA EDITAR
 // ==================================================
 
 async function carregarFilmeParaEditar() {
 
-    const parametros = new URLSearchParams(
-        window.location.search
-    );
+    const parametros =
+        new URLSearchParams(
+            window.location.search
+        );
+
 
     const id = parametros.get("id");
 
+
     if (!id) {
+
+        alert(
+            "ID do filme não encontrado."
+        );
+
         return;
     }
 
+
     try {
 
-        // Também usamos a rota principal,
-        // que já está funcionando na Vercel.
         const resposta = await fetch(API);
 
+
         if (!resposta.ok) {
-            throw new Error(`Erro HTTP: ${resposta.status}`);
+            throw new Error(
+                "Erro ao buscar filmes."
+            );
         }
 
-        const filmes = await resposta.json();
 
-        const filme = filmes.find(
-            (item) => String(item.id) === String(id)
-        );
+        const filmes =
+            await resposta.json();
+
+
+        const filme =
+            filmes.find(
+                item =>
+                    String(item.id) === String(id)
+            );
+
 
         if (!filme) {
 
@@ -314,37 +386,22 @@ async function carregarFilmeParaEditar() {
             return;
         }
 
-        const titulo = document.querySelector(
-            '[name="title"]'
-        );
 
-        const genero = document.querySelector(
-            '[name="genre"]'
-        );
+        document.getElementById("title").value =
+            filme.title;
 
-        const duracao = document.querySelector(
-            '[name="duration"]'
-        );
 
-        const classificacao = document.querySelector(
-            '[name="age_rating"]'
-        );
+        document.getElementById("genre").value =
+            filme.genre;
 
-        if (titulo) {
-            titulo.value = filme.title;
-        }
 
-        if (genero) {
-            genero.value = filme.genre;
-        }
+        document.getElementById("duration").value =
+            filme.duration;
 
-        if (duracao) {
-            duracao.value = filme.duration;
-        }
 
-        if (classificacao) {
-            classificacao.value = filme.age_rating;
-        }
+        document.getElementById("age_rating").value =
+            filme.age_rating;
+
 
     } catch (erro) {
 
@@ -352,6 +409,7 @@ async function carregarFilmeParaEditar() {
             "Erro ao carregar filme:",
             erro
         );
+
 
         alert(
             "Não foi possível carregar os dados do filme."
@@ -370,11 +428,15 @@ async function atualizarFilme(event) {
 
     event.preventDefault();
 
-    const parametros = new URLSearchParams(
-        window.location.search
-    );
+
+    const parametros =
+        new URLSearchParams(
+            window.location.search
+        );
+
 
     const id = parametros.get("id");
+
 
     if (!id) {
 
@@ -385,37 +447,27 @@ async function atualizarFilme(event) {
         return;
     }
 
-    const form = event.target;
 
-    const title = form.querySelector(
-        '[name="title"]'
-    )?.value.trim();
+    const titulo =
+        document.getElementById("title").value.trim();
 
-    const genre = form.querySelector(
-        '[name="genre"]'
-    )?.value.trim();
+    const genero =
+        document.getElementById("genre").value.trim();
 
-    const duration = form.querySelector(
-        '[name="duration"]'
-    )?.value;
+    const duracao =
+        document.getElementById("duration").value;
 
-    const age_rating = form.querySelector(
-        '[name="age_rating"]'
-    )?.value;
+    const classificacao =
+        document.getElementById("age_rating").value;
 
-    if (
-        !title ||
-        !genre ||
-        !duration ||
-        !age_rating
-    ) {
 
-        alert(
-            "Preencha todos os campos."
-        );
+    const dados = {
+        title: titulo,
+        genre: genero,
+        duration: duracao,
+        age_rating: classificacao
+    };
 
-        return;
-    }
 
     try {
 
@@ -428,34 +480,67 @@ async function atualizarFilme(event) {
                     "Content-Type": "application/json"
                 },
 
-                body: JSON.stringify({
-                    title: title,
-                    genre: genre,
-                    duration: duration,
-                    age_rating: age_rating
-                })
+                body: JSON.stringify(dados)
             }
         );
 
+
         if (!resposta.ok) {
-            throw new Error(`Erro HTTP: ${resposta.status}`);
+            throw new Error(
+                "Erro ao atualizar filme."
+            );
         }
 
-        const resultado = await resposta.json();
+
+        const resultado =
+            await resposta.json();
+
+
+        const mensagem =
+            document.getElementById(
+                "mensagem-editar"
+            );
+
+
+        if (mensagem) {
+
+            mensagem.textContent =
+                resultado.message ||
+                "Informações atualizadas com sucesso!";
+
+        }
+
 
         alert(
             resultado.message ||
             "Informações atualizadas com sucesso!"
         );
 
+
         window.location.href = "index.html";
+
 
     } catch (erro) {
 
         console.error(
-            "Erro ao atualizar filme:",
+            "Erro ao atualizar:",
             erro
         );
+
+
+        const mensagem =
+            document.getElementById(
+                "mensagem-editar"
+            );
+
+
+        if (mensagem) {
+
+            mensagem.textContent =
+                "Não foi possível atualizar o filme.";
+
+        }
+
 
         alert(
             "Não foi possível atualizar o filme."
@@ -467,55 +552,63 @@ async function atualizarFilme(event) {
 
 
 // ==================================================
-// INICIALIZAÇÃO
+// APAGAR FILME
 // ==================================================
 
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
+async function apagarFilme(id, titulo) {
 
-        // Página inicial
-        if (
-            document.getElementById("lista-filmes")
-        ) {
+    const confirmar = confirm(
+        `Tem certeza que deseja apagar "${titulo}"?`
+    );
 
-            carregarFilmes();
 
+    if (!confirmar) {
+        return;
+    }
+
+
+    try {
+
+        const resposta = await fetch(
+            `${API}/delete-filmes/${id}`,
+            {
+                method: "DELETE"
+            }
+        );
+
+
+        if (!resposta.ok) {
+            throw new Error(
+                "Erro ao apagar filme."
+            );
         }
 
 
-        // Formulário de cadastro
-        const formularioCadastro =
-            document.querySelector(
-                'form[data-form="cadastro"]'
-            );
-
-        if (formularioCadastro) {
-
-            formularioCadastro.addEventListener(
-                "submit",
-                cadastrarFilme
-            );
-
-        }
+        const resultado =
+            await resposta.json();
 
 
-        // Formulário de edição
-        const formularioEdicao =
-            document.querySelector(
-                'form[data-form="editar"]'
-            );
+        alert(
+            resultado.message ||
+            "Filme apagado com sucesso!"
+        );
 
-        if (formularioEdicao) {
 
-            carregarFilmeParaEditar();
+        carregarFilmes();
 
-            formularioEdicao.addEventListener(
-                "submit",
-                atualizarFilme
-            );
 
-        }
+    } catch (erro) {
+
+        console.error(
+            "Erro ao apagar:",
+            erro
+        );
+
+
+        alert(
+            "Não foi possível apagar o filme."
+        );
 
     }
-);
+
+}
