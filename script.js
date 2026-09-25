@@ -1,4 +1,4 @@
-const API = "https://cine-flash-snowy.vercel.app";
+const API = "https://cine-flash-backend.vercel.app";
 
 
 // ==================================================
@@ -24,7 +24,9 @@ async function carregarFilmes() {
 
         const filmes = await resposta.json();
 
-        carregando.style.display = "none";
+        if (carregando) {
+            carregando.style.display = "none";
+        }
 
         if (filmes.length === 0) {
 
@@ -93,11 +95,13 @@ async function carregarFilmes() {
 
     } catch (erro) {
 
-        carregando.innerHTML = `
-            NÃO FOI POSSÍVEL CONECTAR AO SERVIDOR.
-            <br><br>
-            Verifique se o servidor Express está rodando na porta 3000.
-        `;
+        if (carregando) {
+            carregando.innerHTML = `
+                NÃO FOI POSSÍVEL CONECTAR AO SERVIDOR.
+                <br><br>
+                Verifique a conexão com o servidor.
+            `;
+        }
 
         console.error(erro);
     }
@@ -273,8 +277,15 @@ async function carregarFilmeParaEditar() {
         const resposta =
             await fetch(`${API}/todos-filmes`);
 
+
+        if (!resposta.ok) {
+            throw new Error("Erro ao buscar filmes.");
+        }
+
+
         const filmes =
             await resposta.json();
+
 
         const filme =
             filmes.find(item => item.id == id);
